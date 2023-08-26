@@ -23,7 +23,7 @@ func main() {
 
 	if flag.ErrHelp != nil {
 		fmt.Println("usage: tfc-plan -out myfile.json")
-		fmt.Println("")
+		fmt.Println("git push -u origin main")
 		fmt.Println("Configuration values are set using environment variables, for info please see the following list.")
 		fmt.Println(env.Help())
 		os.Exit(0)
