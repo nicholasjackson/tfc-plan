@@ -12,25 +12,17 @@ import (
 	"github.com/nicholasjackson/env"
 )
 
-var token = env.String("TFC_TOKEN", true, "", "API Token for TFC/TFE")
-var org = env.String("TFC_ORG", true, "", "TFC/TFE Organization")
-var workspace = env.String("TFC_WORKSPACE", true, "", "TFC/TFE Workspace")
-
-var out = flag.String("out", "out.json", "output file for plan")
+var (
+	token     = env.String("TFC_TOKEN", true, "", "API Token for TFC/TFE")
+	org       = env.String("TFC_ORG", true, "", "TFC/TFE Organization")
+	workspace = env.String("TFC_WORKSPACE", true, "", "TFC/TFE Workspace")
+)
 
 func main() {
-	flag.Parse()
-
-	if flag.ErrHelp != nil {
-		fmt.Println("usage: tfc-plan -out myfile.json")
-		fmt.Println("git push -u origin main")
-		fmt.Println("Configuration values are set using environment variables, for info please see the following list.")
-		fmt.Println(env.Help())
-		os.Exit(0)
-	}
+	out := ""
+	flag.StringVar(&out, "out", "out.json", "output file for plan")
 
 	err := env.Parse()
-
 	if err != nil {
 		fmt.Println("Configuration values are set using environment variables, for info please see the following list.")
 		fmt.Println(err)
@@ -88,8 +80,8 @@ func main() {
 				log.Fatal("Unable to read plan output", "error", err)
 			}
 
-			os.WriteFile(*out, d, os.ModePerm)
-			log.Info("Successfully written plan", "out", *out)
+			os.WriteFile(out, d, os.ModePerm)
+			log.Info("Successfully written plan", "out", out)
 			os.Exit(0)
 		case tfe.RunErrored:
 			log.Fatal("Unable to create plan", "message", s.Message)
